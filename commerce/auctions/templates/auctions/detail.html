@@ -1,0 +1,63 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{product.title}}</h2>
+
+    {% if results is not None %}
+        {% for result in results %}
+            <h2>{{result.user_id}}! You are Winner of this Auction! Congratuations!</h2>
+        {% endfor %}
+    {% endif %}
+
+    <strong>Category</strong> : {{product.category}}
+     <img src="{{product.image_link}}" alt="No image">
+    <strong>Description</strong> : {{product.description}}
+    <strong>Price</strong> : ${{product.price}}
+    <strong>Seller</strong> : {{product.selled_by}}
+    <strong>Created at</strong> : {{product.created_at}}
+
+    <!-- watchlist -->
+    <form action="{% url 'update_watch_list' %}" method="post">
+      {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{product.id}}">
+          {% if flag %}
+              <input type="submit" name="" value="Remove in my Watch list">
+          {% else %}
+              <input type="submit" name="" value="Add my Watch list">
+          {% endif %}
+    </form>
+
+    <!-- bid -->
+    {% if not product.is_closed %}
+        {{message}}
+        <form action="{% url 'bid' %}" method="post">
+            {% csrf_token %}
+                {{form}}
+                <input type="hidden" name="product_id" value="{{product.id}}">
+                <input type="submit" name="" value="Submit">
+        </form>
+            {% if user == product.selled_by %}
+                <form class="" action="{% url 'close_auction' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                    <input type="submit" name="" value="Close Auction">
+                </form>
+            {% endif %}
+            
+    {% endif %}
+
+
+    <br>
+    Comments :
+    <br>
+    {% for comment in comments %}
+        <strong>{{ comment.user_id }}</strong> : {{ comment.content }}
+        <br>
+    {% endfor %}
+    <form action="{% url 'comment' %}" method="post">
+        {% csrf_token %}
+        <input type="textarea" name="comment">
+        <input type="hidden" name="product_id" value="{{product.id}}">
+        <input type="submit" name="" value="Comment">
+    </form>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+    <ul>
+      {% for list in lists %}
+          <li><h4>{{list}}</h4></li>
+              {% for product in products %}
+                  {% if product.category == list %}
+                      <a href="{% url 'detail' product %}">{{product}}</a> 
+                      <br>
+                  {% endif %}
+              {% endfor %}
+      {% endfor %}
+    </ul>
+
+
+{% endblock %}

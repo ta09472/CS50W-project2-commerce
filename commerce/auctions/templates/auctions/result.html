@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Result</h2>
+      <h3>Auction is Closed</h3>
+    {% for bidding in bidding_list %}
+        Winner : {{ bidding.user_id }}
+        Product : {{ bidding.product_id }}
+        Bidding Price : ${{ bidding.bidding }}
+    {% endfor %}
+    <a href="{% url 'index' %}">Back to Listings</a>
+{% endblock %}
